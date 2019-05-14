@@ -301,9 +301,9 @@ END GROUP
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.CyclyCount
+ .bss.CycleCount
                 0x00800100        0x2 main.o
-                0x00800100                CyclyCount
+                0x00800100                CycleCount
  *(COMMON)
                 0x00800102                PROVIDE (__bss_end, .)
                 0x0000013e                __data_load_start = LOADADDR (.data)

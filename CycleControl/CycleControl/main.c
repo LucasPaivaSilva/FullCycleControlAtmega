@@ -23,7 +23,7 @@
 #define tst_bit(y,bit) 	(y&(1<<bit))	//retorna 0 ou 1 conforme leitura do bit
 
 //Variáveis
-int CyclyCount = 0;
+int CycleCount = 0;
 
 #define NCycles 3
 
@@ -34,20 +34,20 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	if (tst_bit(TCCR1B, ICES1))
 	{
 		clr_bit(TCCR1B, ICES1);
-		CyclyCount = CyclyCount + 1;
+		CycleCount++;
 	}
 	else
 	{
 		set_bit(TCCR1B, ICES1);
-		CyclyCount = CyclyCount + 1;
+		CycleCount++;
 	}
 	
 	//Verifica o número de ciclos e dispara o SCR
-	if (CyclyCount >= NCycles)
+	if (CycleCount >= NCycles)
 	{
 		set_bit(PORTB, PB1);
-		CyclyCount = 0;
-		_delay_ms(1);
+		CycleCount = 0;
+		_delay_ms(2);
 		clr_bit(PORTB, PB1);
 	}
 	

@@ -88,7 +88,7 @@ Disassembly of section .text:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000090 <__vector_10>:
-int CyclyCount = 0;
+int CycleCount = 0;
 
 #define NCycles 3
 
@@ -116,7 +116,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
   ae:	80 81       	ld	r24, Z
   b0:	8f 7b       	andi	r24, 0xBF	; 191
   b2:	80 83       	st	Z, r24
-		CyclyCount = CyclyCount + 1;
+		CycleCount++;
   b4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
   b8:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
   bc:	01 96       	adiw	r24, 0x01	; 1
@@ -132,7 +132,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
   cc:	80 81       	ld	r24, Z
   ce:	80 64       	ori	r24, 0x40	; 64
   d0:	80 83       	st	Z, r24
-		CyclyCount = CyclyCount + 1;
+		CycleCount++;
   d2:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
   d6:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
   da:	01 96       	adiw	r24, 0x01	; 1
@@ -141,7 +141,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	}
 	
 	//Verifica o número de ciclos e dispara o SCR
-	if (CyclyCount >= NCycles)
+	if (CycleCount >= NCycles)
   e4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
   e8:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
   ec:	03 97       	sbiw	r24, 0x03	; 3
@@ -149,7 +149,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	{
 		set_bit(PORTB, PB1);
   f0:	29 9a       	sbi	0x05, 1	; 5
-		CyclyCount = 0;
+		CycleCount = 0;
   f2:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <_edata+0x1>
   f6:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <_edata>
 	#else
@@ -158,13 +158,13 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  fa:	8f e9       	ldi	r24, 0x9F	; 159
-  fc:	9f e0       	ldi	r25, 0x0F	; 15
+  fa:	8f e3       	ldi	r24, 0x3F	; 63
+  fc:	9f e1       	ldi	r25, 0x1F	; 31
   fe:	01 97       	sbiw	r24, 0x01	; 1
  100:	f1 f7       	brne	.-4      	; 0xfe <__vector_10+0x6e>
  102:	00 c0       	rjmp	.+0      	; 0x104 <__vector_10+0x74>
  104:	00 00       	nop
-		_delay_ms(1);
+		_delay_ms(2);
 		clr_bit(PORTB, PB1);
  106:	29 98       	cbi	0x05, 1	; 5
 	}
