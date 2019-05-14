@@ -301,9 +301,9 @@ END GROUP
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.CycleCount
+ .bss.SemiCycleCount
                 0x00800100        0x2 main.o
-                0x00800100                CycleCount
+                0x00800100                SemiCycleCount
  *(COMMON)
                 0x00800102                PROVIDE (__bss_end, .)
                 0x0000013e                __data_load_start = LOADADDR (.data)
@@ -405,11 +405,11 @@ END GROUP
  *(.debug_frame)
  .debug_frame   0x00000000       0x54 main.o
 
-.debug_str      0x00000000      0x3d4
+.debug_str      0x00000000      0x3d8
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_str     0x00000208      0x1cc main.o
-                                0x200 (size before relaxing)
+ .debug_str     0x00000208      0x1d0 main.o
+                                0x204 (size before relaxing)
 
 .debug_loc      0x00000000       0xa9
  *(.debug_loc)

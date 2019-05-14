@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000054  00000000  00000000  000012bc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003d4  00000000  00000000  00001310  2**0
+ 10 .debug_str    000003d8  00000000  00000000  00001310  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000a9  00000000  00000000  000016e4  2**0
+ 11 .debug_loc    000000a9  00000000  00000000  000016e8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000018  00000000  00000000  0000178d  2**0
+ 12 .debug_ranges 00000018  00000000  00000000  00001791  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -88,9 +88,9 @@ Disassembly of section .text:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000090 <__vector_10>:
-int CycleCount = 0;
+int SemiCycleCount = 0;
 
-#define NCycles 3
+#define NSemiCycles 3
 
 ISR(TIMER1_CAPT_vect) //interrupção do T1
 {
@@ -116,7 +116,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
   ae:	80 81       	ld	r24, Z
   b0:	8f 7b       	andi	r24, 0xBF	; 191
   b2:	80 83       	st	Z, r24
-		CycleCount++;
+		SemiCycleCount++;
   b4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
   b8:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
   bc:	01 96       	adiw	r24, 0x01	; 1
@@ -132,7 +132,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
   cc:	80 81       	ld	r24, Z
   ce:	80 64       	ori	r24, 0x40	; 64
   d0:	80 83       	st	Z, r24
-		CycleCount++;
+		SemiCycleCount++;
   d2:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
   d6:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
   da:	01 96       	adiw	r24, 0x01	; 1
@@ -141,7 +141,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	}
 	
 	//Verifica o número de ciclos e dispara o SCR
-	if (CycleCount >= NCycles)
+	if (SemiCycleCount >= NSemiCycles)
   e4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <_edata>
   e8:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <_edata+0x1>
   ec:	03 97       	sbiw	r24, 0x03	; 3
@@ -149,7 +149,7 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	{
 		set_bit(PORTB, PB1);
   f0:	29 9a       	sbi	0x05, 1	; 5
-		CycleCount = 0;
+		SemiCycleCount = 0;
   f2:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <_edata+0x1>
   f6:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <_edata>
 	#else

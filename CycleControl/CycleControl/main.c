@@ -23,9 +23,9 @@
 #define tst_bit(y,bit) 	(y&(1<<bit))	//retorna 0 ou 1 conforme leitura do bit
 
 //Variáveis
-int CycleCount = 0;
+int SemiCycleCount = 0;
 
-#define NCycles 3
+#define NSemiCycles 3
 
 ISR(TIMER1_CAPT_vect) //interrupção do T1
 {
@@ -34,19 +34,19 @@ ISR(TIMER1_CAPT_vect) //interrupção do T1
 	if (tst_bit(TCCR1B, ICES1))
 	{
 		clr_bit(TCCR1B, ICES1);
-		CycleCount++;
+		SemiCycleCount++;
 	}
 	else
 	{
 		set_bit(TCCR1B, ICES1);
-		CycleCount++;
+		SemiCycleCount++;
 	}
 	
 	//Verifica o número de ciclos e dispara o SCR
-	if (CycleCount >= NCycles)
+	if (SemiCycleCount >= NSemiCycles)
 	{
 		set_bit(PORTB, PB1);
-		CycleCount = 0;
+		SemiCycleCount = 0;
 		_delay_ms(2);
 		clr_bit(PORTB, PB1);
 	}
